@@ -82,10 +82,11 @@ std::string heartbeatPathDOF = serverPath + "/n010_20/cmd/DOF";
 int trigger(String command) {
     // Get state from command
     int state = command.toInt();
+    Serial.println(state);
     if(state == 100) {
         Serial.println("request awning trigger");
         // Awning Control only so often
-        if(currentMillis - relayMillis > relayInterval) {
+           if(currentMillis - relayMillis > relayInterval) {
             digitalWrite(pbpower, HIGH);
             digitalWrite(pbbutton, HIGH);
             Serial.println("**awning button pushed**");
@@ -98,8 +99,8 @@ int trigger(String command) {
         } else {
             Serial.println("awning control too soon");
         }
-    }
-    return 1;
+         }
+    return state;
 }
 
 
@@ -122,10 +123,17 @@ void setup(void)
   rest.variable("responseERR",&responseERR);
   
   // Function to be exposed
-  rest.function((char*)"trigger",trigger);
+  rest.function("trigger",trigger);
 
-   pinMode(LED_BUILTIN, OUTPUT);
-   digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED off by making the voltage HIGH
+  // prepare GPIO
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED off by making the voltage HIGH
+  pinMode(pbpower, OUTPUT);
+  digitalWrite(pbpower, LOW);
+  delay(1);
+  pinMode(pbbutton, OUTPUT);
+  digitalWrite(pbbutton, LOW);
+  delay(1);
 
   // Give name & ID to the device (ID should be 6 characters long)
   rest.set_id("1");
@@ -231,6 +239,8 @@ void loop() {
             } else {
                 sent = String(heartbeatPathDOF.c_str());
             }
+            Serial.println(sent);
+
             http.begin(rclient, sent.c_str());
             //http.setAuthorization(isylogin, isypass);
             http.setAuthorization(hash);
