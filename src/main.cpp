@@ -25,7 +25,7 @@
 
 /* Passwords & Ports
  * wifi: ssid, password
- * ISY: hash, isy, isyport
+ * ISY: hash, eisy, polisy
  * MQTT mqtt_server, mqtt_serverport
  */
 #include </Users/stephenjenkins/Projects/keys/sej/sej.h>
@@ -70,8 +70,8 @@ int response;
 String responseERR;
 
 
-// variables in the ISY API
-std::string serverPath = "http://"+std::string(isyip)+std::string(":")+std::to_string(isyport)+std::string("/rest/nodes");
+// variables in the EISY API
+std::string serverPath = "http://"+std::string(eisy)+std::string(":")+std::to_string(isyport)+std::string("/rest/nodes");
 std::string heartbeatPathDON = serverPath + "/n010_20/cmd/DON";
 std::string heartbeatPathDOF = serverPath + "/n010_20/cmd/DOF";
 
